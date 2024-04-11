@@ -9,14 +9,14 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 
-import { PostService } from './post.service';
+import { PostsService } from './posts.service';
 import { PostDTO } from './dto/create-post.dto';
 import { Prisma } from '@prisma/client';
 import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('post')
-export class PostController {
-  constructor(private readonly postService: PostService) {}
+export class PostsController {
+  constructor(private readonly postService: PostsService) {}
 
   private extractQueryParams(req: Request) {
     const skip: number = req.query.skip ? Number(req.query.skip) : undefined;

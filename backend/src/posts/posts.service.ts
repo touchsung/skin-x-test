@@ -4,7 +4,7 @@ import { PostDTO } from './dto/create-post.dto';
 import { Prisma } from '@prisma/client';
 
 @Injectable()
-export class PostService {
+export class PostsService {
   constructor(private prisma: PrismaService) {}
 
   async getAllPosts(params: {
