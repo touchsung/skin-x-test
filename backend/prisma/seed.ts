@@ -52,8 +52,6 @@ async function seed() {
           },
         },
       });
-
-      console.log(`Post "${title}" created successfully.`);
     }
     console.log('Seed data inserted successfully.');
   } catch (error) {

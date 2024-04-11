@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=password
+    ports:
+      - "5434:5432"
+    networks:
+      - skin-x
+
+  backend:
+    build: ./backend
+    environment:
+      - PORT=8080
+      - DATABASE_URL=postgresql://postgres:password@db/postgres
+      - SECRET_KEY=secret
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    networks:
+      - skin-x
+
+networks:
+  skin-x:
+    driver: bridge
