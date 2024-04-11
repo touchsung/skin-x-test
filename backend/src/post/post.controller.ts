@@ -1,9 +1,18 @@
-import { Controller, Get, Res, HttpStatus, Req, Param } from '@nestjs/common';
-import { Request, Response } from 'express';
+import {
+  Controller,
+  Get,
+  HttpStatus,
+  Req,
+  Param,
+  UseGuards,
+  HttpCode,
+} from '@nestjs/common';
+import { Request } from 'express';
 
 import { PostService } from './post.service';
 import { PostDTO } from './dto/create-post.dto';
 import { Prisma } from '@prisma/client';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('post')
 export class PostController {
@@ -36,43 +45,39 @@ export class PostController {
     return { skip, take, tag, title, orderBy, cursor };
   }
 
+  @UseGuards(AuthGuard)
+  @HttpCode(HttpStatus.OK)
   @Get()
-  async getAllPosts(@Req() req: Request, @Res() res: Response): Promise<void> {
-    try {
-      const { skip, take, tag, title, orderBy, cursor } =
-        this.extractQueryParams(req);
+  async getAllPosts(@Req() req: Request): Promise<PostDTO[]> {
+    const { skip, take, tag, title, orderBy, cursor } =
+      this.extractQueryParams(req);
 
-      const posts: PostDTO[] = await this.postService.getAllPosts({
-        skip,
-        take,
-        orderBy,
-        cursor,
-        where: {
-          AND: [
-            tag
-              ? {
-                  TagsOnPosts: {
-                    some: {
-                      tag: {
-                        name: tag,
-                      },
+    return this.postService.getAllPosts({
+      skip,
+      take,
+      orderBy,
+      cursor,
+      where: {
+        AND: [
+          tag
+            ? {
+                TagsOnPosts: {
+                  some: {
+                    tag: {
+                      name: tag,
                     },
                   },
-                }
-              : undefined,
-            title ? { title: { contains: title } } : undefined,
-          ].filter(Boolean), // Remove undefined values
-        },
-      });
-      res.status(HttpStatus.OK).json({ data: posts });
-    } catch (error) {
-      res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
-        function: 'getAllPosts',
-        message: 'Error fetching posts',
-      });
-    }
+                },
+              }
+            : undefined,
+          title ? { title: { contains: title } } : undefined,
+        ].filter(Boolean),
+      },
+    });
   }
 
+  @UseGuards(AuthGuard)
+  @HttpCode(HttpStatus.OK)
   @Get(':id')
   async getPostById(@Param('id') id: string): Promise<PostDTO> {
     return this.postService.getPostDetail({ id: Number(id) });
