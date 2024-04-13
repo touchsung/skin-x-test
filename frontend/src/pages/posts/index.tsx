@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Post, queryGetAllPosts } from "../../types/posts";
 import { getAllPosts } from "../../api/posts";
 import PostCard from "../../components/post/PostCard";
@@ -6,8 +6,13 @@ import ReactLoading from "react-loading";
 import { getAllTags } from "../../api/tags";
 import Dropdown from "../../components/Dropdown";
 import { useNavigate } from "react-router-dom";
+import Layout from "../../components/Layout";
+import AuthContext from "../../context/AuthContext";
+import ScrollToTopButton from "../../components/button/ScrollToTopButton";
 
 export const PostPage = () => {
+  const { user } = useContext(AuthContext);
+
   const [postLists, setPostLists] = useState<Post[]>([]);
   const [queryAllPosts, setQueryAllPosts] = useState<queryGetAllPosts>();
   const [loading, setLoading] = useState(false);
@@ -40,21 +45,24 @@ export const PostPage = () => {
   };
 
   useEffect(() => {
-    void getTagLists();
-    const userLocal = localStorage.getItem("accessToken");
-    if (!userLocal) {
+    if (user) {
+      void getTagLists();
+    } else {
       navigator("/login");
     }
-  }, []);
+  }, [user]);
 
   useEffect(() => {
-    void getPostLists(queryAllPosts);
-  }, [queryAllPosts]);
+    if (user) {
+      void getPostLists(queryAllPosts);
+    }
+  }, [queryAllPosts, user]);
 
   useEffect(() => {
     function handleScroll() {
       const { scrollTop, clientHeight, scrollHeight } =
         document.documentElement;
+
       if (scrollTop + clientHeight >= scrollHeight - 10) {
         setQueryAllPosts((pre) => {
           return {
@@ -73,8 +81,8 @@ export const PostPage = () => {
   }, [postLists.length]);
 
   return (
-    <>
-      <section className="flex gap-2">
+    <Layout>
+      <section className="flex gap-2 sticky w-full bg-white top-12 pt-2 container">
         <input
           type="text"
           placeholder="Search"
@@ -125,18 +133,21 @@ export const PostPage = () => {
           }
         />
       </section>
-      {postLists.map((post, idx) => (
-        <PostCard key={idx} postDetail={post} />
-      ))}
-      {loading && (
-        <ReactLoading
-          type="bubbles"
-          color="gray"
-          height={667}
-          width={80}
-          className="mx-auto"
-        />
-      )}
-    </>
+      <section className="container">
+        {postLists.map((post, idx) => (
+          <PostCard key={idx} postDetail={post} />
+        ))}
+        {loading && (
+          <ReactLoading
+            type="bubbles"
+            color="gray"
+            height={667}
+            width={80}
+            className="mx-auto"
+          />
+        )}
+      </section>
+      <ScrollToTopButton />
+    </Layout>
   );
 };

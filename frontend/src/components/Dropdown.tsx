@@ -11,6 +11,7 @@ interface DropdownProps {
 const Dropdown = ({ name, itemLists, onSelect }: DropdownProps) => {
   const [visibleItems, setVisibleItems] = useState(5);
   const [loading, setLoading] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<string>();
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement, UIEvent>) => {
     const element = e.currentTarget;
@@ -28,7 +29,7 @@ const Dropdown = ({ name, itemLists, onSelect }: DropdownProps) => {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <Menu.Button className="flex items-center bg-gray-200 px-4 py-2 rounded-md">
-        <h4 className="mr-2">{name}</h4>
+        <h4 className="mr-2 truncate">{selectedItem || name}</h4>
         <RiArrowDropDownLine />
       </Menu.Button>
       <Menu.Items
@@ -45,6 +46,7 @@ const Dropdown = ({ name, itemLists, onSelect }: DropdownProps) => {
                   } block px-4 py-2 text-sm`}
                   onClick={() => {
                     onSelect(item);
+                    setSelectedItem(item);
                   }}
                 >
                   {item}

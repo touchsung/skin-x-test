@@ -32,9 +32,9 @@ const InputValidation: React.FC<InputValidationProps> = ({
     />
     {touched[field.name as keyof userDataInput] &&
     errors[field.name as keyof userDataInput] ? (
-      <p className="text-red-600">
+      <span className="text-red-600">
         {errors[field.name as keyof userDataInput]}
-      </p>
+      </span>
     ) : null}
   </div>
 );

@@ -1,24 +1,26 @@
 import React from "react";
 import { Post } from "../../types/posts";
 import { formatDate } from "../../utils/helper";
+import { useNavigate } from "react-router-dom";
 
-interface PostCardProps {
+export interface PostCardProps {
   postDetail: Post;
 }
 
 const PostCard: React.FC<PostCardProps> = ({ postDetail }) => {
-  const handleClick = () => {
-    alert("Clicked on post card");
+  const navigator = useNavigate();
+  const handleClick = (id: number) => {
+    navigator(`post/${id}`);
   };
 
   return (
     <section className="mx-auto bg-white shadow-md rounded-lg overflow-hidden my-4">
       <div className="p-4">
         <h1 className="text-xl font-bold mb-2">{postDetail.title}</h1>
-        <p className="text-gray-600 text-sm mb-4">
+        <h2 className="text-gray-600 text-sm my-2">
           Posted on {formatDate(postDetail.postedAt)} by{" "}
           {postDetail.postedBy.name}
-        </p>
+        </h2>
         <div className="flex items-start justify-between">
           <div className="flex flex-wrap">
             {postDetail.TagsOnPosts.map((item, idx) => (
@@ -32,7 +34,7 @@ const PostCard: React.FC<PostCardProps> = ({ postDetail }) => {
           </div>
           <div className="w-full max-w-fit flex justify-end">
             <button
-              onClick={handleClick}
+              onClick={() => handleClick(postDetail.id)}
               className="text-gray-600 text-sm mt-2 hover:underline block w-fit"
             >
               See more

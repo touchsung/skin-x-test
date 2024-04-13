@@ -29,3 +29,23 @@ export const getAllPosts = async (
     throw error;
   }
 };
+
+export const getPost = async (id: string): Promise<Post | null> => {
+  try {
+    const url = `http://localhost:8080/posts/${id}`;
+
+    const response = await axios.get(url, {
+      headers: {
+        Authorization: `Bearer ${getUserToken()}`,
+      },
+    });
+    if (response.status === 200) {
+      return response.data as Post;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error("[getPost] - An error occurred:", error);
+    throw error;
+  }
+};

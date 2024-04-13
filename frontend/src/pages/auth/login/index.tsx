@@ -60,7 +60,9 @@ const LoginPage = () => {
             field={formik.getFieldProps("password")}
             form={formik}
           />
-          {errorMsg && <p className="text-red-500 text-sm my-2">{errorMsg}</p>}
+          {errorMsg && (
+            <h5 className="text-red-500 text-sm my-2">{errorMsg}</h5>
+          )}
           <button type="submit" className="btn-primary">
             Login
           </button>

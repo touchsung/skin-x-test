@@ -9,6 +9,8 @@ interface AuthContextType {
   user: userDataJTW | undefined;
   handleRegister: (userData: userDataInput) => Promise<userData | undefined>;
   handleLogIn: (userData: userDataInput) => Promise<userData | undefined>;
+  handleLogOut: () => void;
+  checkAccessToken: () => void;
   errorMsg: string | undefined;
 }
 
@@ -16,6 +18,8 @@ const AuthContext = createContext<AuthContextType>({
   user: undefined,
   handleRegister: async () => undefined,
   handleLogIn: async () => undefined,
+  handleLogOut: async () => undefined,
+  checkAccessToken: async () => undefined,
   errorMsg: undefined,
 });
 
@@ -42,9 +46,6 @@ export const AuthProvider = ({ children }: { children: ReactElement }) => {
     try {
       const result = await postRegister(userData);
       setAccessToken(result.data.accessToken);
-
-      // const decoded: userDataJTW = jwtDecode(result.data.accessToken);
-      // setUser(decoded);
       return result.data;
     } catch (error) {
       handleErrorMsg(error);
@@ -67,32 +68,41 @@ export const AuthProvider = ({ children }: { children: ReactElement }) => {
     setUser(undefined);
   };
 
-  const contextValue = {
-    user,
-    handleRegister,
-    handleLogIn,
-    errorMsg,
-  };
-
-  useEffect(() => {
-    if (accessToken) {
-      const decoded: userDataJTW = jwtDecode(accessToken);
-      localStorage.setItem("accessToken", accessToken);
-      setUser(decoded);
-    }
-  }, [accessToken]);
-
-  useEffect(() => {
+  const checkAccessToken = () => {
     const token = getUserToken();
+
     if (token) {
       const decoded = jwtDecode(token);
       const currentDate = new Date().getTime();
       const currentTimestamp = Math.floor(currentDate / 1000);
 
       if (decoded.exp && currentTimestamp > decoded.exp) {
+        alert("Your session has expired. please log in.");
         handleLogOut();
       }
     }
+  };
+
+  const contextValue = {
+    user,
+    handleRegister,
+    handleLogIn,
+    handleLogOut,
+    errorMsg,
+    checkAccessToken,
+  };
+
+  useEffect(() => {
+    const token = accessToken || localStorage.getItem("accessToken");
+    if (token) {
+      const decoded: userDataJTW = jwtDecode(token);
+      localStorage.setItem("accessToken", token);
+      setUser(decoded);
+    }
+  }, [accessToken]);
+
+  useEffect(() => {
+    checkAccessToken();
   }, []);
 
   return (
