@@ -14,7 +14,7 @@ import { PostDTO } from './dto/create-post.dto';
 import { Prisma } from '@prisma/client';
 import { AuthGuard } from 'src/auth/auth.guard';
 
-@Controller('post')
+@Controller('posts')
 export class PostsController {
   constructor(private readonly postService: PostsService) {}
 

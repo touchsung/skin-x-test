@@ -3,6 +3,7 @@ import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
+import { UserData } from './dto/auth.dto';
 
 @Injectable()
 export class AuthService {
@@ -11,7 +12,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async signIn(userData: User): Promise<{ access_token: string }> {
+  async signIn(userData: User): Promise<UserData> {
     const user = await this.usersService.findOne(userData.email);
     if (
       !user ||
@@ -21,17 +22,22 @@ export class AuthService {
     }
     const payload = { sub: user.id, email: user.email };
     return {
-      access_token: await this.jwtService.signAsync(payload),
+      accessToken: await this.jwtService.signAsync(payload),
     };
   }
 
-  async signUp(userData: User): Promise<{ access_token: string }> {
+  async signUp(userData: User): Promise<UserData> {
     const { email, password } = userData;
+    const existingUser = await this.usersService.findOne(email);
+    if (existingUser) {
+      throw new UnauthorizedException('User with this email already exists');
+    }
+
     const hashedPassword = await this.hashPassword(password);
     const user = await this.usersService.createUser(email, hashedPassword);
     const payload = { sub: user.id, email: user.email };
     return {
-      access_token: await this.jwtService.signAsync(payload),
+      accessToken: await this.jwtService.signAsync(payload),
     };
   }
 
