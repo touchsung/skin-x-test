@@ -30,12 +30,14 @@ const PostCard: React.FC<PostCardProps> = ({ postDetail }) => {
               </span>
             ))}
           </div>
-          <button
-            onClick={handleClick}
-            className="text-gray-600 text-sm mt-2 hover:underline"
-          >
-            See more
-          </button>
+          <div className="w-full max-w-fit flex justify-end">
+            <button
+              onClick={handleClick}
+              className="text-gray-600 text-sm mt-2 hover:underline block w-fit"
+            >
+              See more
+            </button>
+          </div>
         </div>
       </div>
     </section>

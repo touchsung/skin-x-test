@@ -5,12 +5,15 @@ import PostCard from "../../components/post/PostCard";
 import ReactLoading from "react-loading";
 import { getAllTags } from "../../api/tags";
 import Dropdown from "../../components/Dropdown";
+import { useNavigate } from "react-router-dom";
 
 export const PostPage = () => {
   const [postLists, setPostLists] = useState<Post[]>([]);
   const [queryAllPosts, setQueryAllPosts] = useState<queryGetAllPosts>();
   const [loading, setLoading] = useState(false);
   const [tagLists, setTagLists] = useState<string[]>([]);
+  const navigator = useNavigate();
+
   const getPostLists = async (query?: queryGetAllPosts) => {
     try {
       setLoading(true);
@@ -38,6 +41,10 @@ export const PostPage = () => {
 
   useEffect(() => {
     void getTagLists();
+    const userLocal = localStorage.getItem("accessToken");
+    if (!userLocal) {
+      navigator("/login");
+    }
   }, []);
 
   useEffect(() => {

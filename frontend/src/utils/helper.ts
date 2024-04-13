@@ -6,3 +6,12 @@ export const formatDate = (dateString: string) => {
     day: "numeric",
   });
 };
+
+export const getUserToken = (): string | null => {
+  if (localStorage.getItem("accessToken")) {
+    const userDataStr = localStorage.getItem("accessToken");
+    return userDataStr;
+  } else {
+    return null;
+  }
+};

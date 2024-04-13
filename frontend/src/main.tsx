@@ -4,19 +4,27 @@ import * as ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { PostPage } from "./pages/posts";
 import RegisterPage from "./pages/auth/register";
+import { AuthProvider } from "./context/AuthContext";
+import LoginPage from "./pages/auth/login";
 
 const router = createBrowserRouter([
   {
-    path: "/posts",
+    path: "/",
     element: <PostPage />,
   },
   {
     path: "/register",
     element: <RegisterPage />,
   },
+  {
+    path: "/login",
+    element: <LoginPage />,
+  },
 ]);
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   </React.StrictMode>
 );

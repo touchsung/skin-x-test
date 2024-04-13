@@ -3,19 +3,16 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 import InputValidation from "../../../components/input/InputValidation";
 import AuthContext from "../../../context/AuthContext";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-const RegisterPage = () => {
-  const { handleRegister, errorMsg, user } = useContext(AuthContext);
+const LoginPage = () => {
+  const { handleLogIn, errorMsg, user } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const validationSchema = Yup.object({
-    email: Yup.string()
-      .email("Invalid email address")
-      .required("Please fill email input"),
-    password: Yup.string()
-      .min(8, "Password must be at least 8 characters")
-      .required("Please fill password input"),
+    email: Yup.string().required("Please fill email input"),
+    password: Yup.string().required("Please fill password input"),
   });
 
   const formik = useFormik({
@@ -25,7 +22,7 @@ const RegisterPage = () => {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      const result = await handleRegister(values);
+      const result = await handleLogIn(values);
       if (result) {
         navigate("/");
       }
@@ -42,11 +39,10 @@ const RegisterPage = () => {
       navigate("/");
     }
   }, [user]);
-
   return (
     <div className="flex items-center justify-center h-screen">
       <section className="bg-white shadow-md rounded-lg overflow-hidden p-4 max-w-lg w-full">
-        <h1 className="text-2xl font-bold mb-4">Register</h1>
+        <h1 className="text-2xl font-bold mb-4">Login</h1>
         <form onSubmit={handleSubmit}>
           <InputValidation
             id="email"
@@ -66,11 +62,10 @@ const RegisterPage = () => {
           />
           {errorMsg && <p className="text-red-500 text-sm my-2">{errorMsg}</p>}
           <button type="submit" className="btn-primary">
-            Register
+            Login
           </button>
-
           <button className="btn-secondary">
-            <Link to="/login">Login</Link>
+            <Link to="/register">Register</Link>
           </button>
         </form>
       </section>
@@ -78,4 +73,4 @@ const RegisterPage = () => {
   );
 };
 
-export default RegisterPage;
+export default LoginPage;
