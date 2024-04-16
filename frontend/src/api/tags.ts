@@ -1,12 +1,13 @@
-import axios, { AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
 import { Tags } from "../types/tags";
 import { getUserToken } from "../utils/helper";
+import api from "./base";
 
 export const getAllTags = async (): Promise<Tags[]> => {
   try {
-    const url = "http://localhost:8080/tags";
+    const url = `${import.meta.env.VITE_API_URL}/tags`;
 
-    const response: AxiosResponse<Tags[]> = await axios.get(url, {
+    const response: AxiosResponse<Tags[]> = await api.get(url, {
       headers: {
         Authorization: `Bearer ${getUserToken()}`,
       },

@@ -1,12 +1,12 @@
-import axios from "axios";
 import { Post, queryGetAllPosts } from "../types/posts";
 import { getUserToken } from "../utils/helper";
+import api from "./base";
 
 export const getAllPosts = async (
   query?: queryGetAllPosts
 ): Promise<Post[]> => {
   try {
-    let url = "http://localhost:8080/posts";
+    let url = `${import.meta.env.VITE_API_URL}/posts`;
     if (query) {
       const queryParams = new URLSearchParams(
         query as Record<string, string>
@@ -14,7 +14,7 @@ export const getAllPosts = async (
       url += `?${queryParams}`;
     }
 
-    const response = await axios.get(url, {
+    const response = await api.get(url, {
       headers: {
         Authorization: `Bearer ${getUserToken()}`,
       },
@@ -32,9 +32,9 @@ export const getAllPosts = async (
 
 export const getPost = async (id: string): Promise<Post | null> => {
   try {
-    const url = `http://localhost:8080/posts/${id}`;
+    const url = `${import.meta.env.VITE_API_URL}/posts/${id}`;
 
-    const response = await axios.get(url, {
+    const response = await api.get(url, {
       headers: {
         Authorization: `Bearer ${getUserToken()}`,
       },

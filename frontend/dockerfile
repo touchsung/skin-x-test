@@ -1,0 +1,19 @@
+FROM node:20.9.0-alpine
+
+WORKDIR /app
+
+ARG VITE_API_URL
+ARG VITE_PORT
+
+ENV VITE_API_URL=${VITE_API_URL}
+ENV VITE_PORT=$VITE_PORT
+
+COPY package.json .
+
+RUN npm install
+
+COPY . .
+
+RUN npm run build
+
+CMD [ "npm", "run", "preview" ]

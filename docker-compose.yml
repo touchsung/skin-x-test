@@ -24,6 +24,19 @@ services:
     networks:
       - skin-x
 
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        - VITE_PORT=3000
+        - VITE_API_URL=http://localhost:8080
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - skin-x
+
 networks:
   skin-x:
     driver: bridge

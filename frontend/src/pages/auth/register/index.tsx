@@ -64,7 +64,9 @@ const RegisterPage = () => {
             field={formik.getFieldProps("password")}
             form={formik}
           />
-          {errorMsg && <p className="text-red-500 text-sm my-2">{errorMsg}</p>}
+          {errorMsg && (
+            <div className="text-red-500 text-sm my-2">{errorMsg}</div>
+          )}
           <button type="submit" className="btn-primary">
             Register
           </button>
