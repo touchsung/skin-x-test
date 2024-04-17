@@ -65,12 +65,15 @@ export class PostsController {
                   some: {
                     tag: {
                       name: tag,
+                      mode: Prisma.QueryMode.insensitive,
                     },
                   },
                 },
               }
             : undefined,
-          title ? { title: { contains: title } } : undefined,
+          title
+            ? { title: { contains: title, mode: Prisma.QueryMode.insensitive } }
+            : undefined,
         ].filter(Boolean),
       },
     });
