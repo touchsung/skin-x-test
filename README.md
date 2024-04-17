@@ -1,6 +1,6 @@
 # Project Overview
 
-- This project includes a server folder built with Nest.ts and a frontend folder built with React.ts. The development environment is containerized using Docker, allowing for easy setup and deployment.
+This project includes a backend folder built with Nest.ts and a frontend folder built with React.ts. The development environment is containerized using Docker, allowing for easy setup and deployment.
 
 ## Getting Started
 
@@ -16,16 +16,16 @@
   docker-compose up
   ```
 
-- This command will build and start the Docker containers for both the server and frontend. Once the containers are running, you can access the application at` http://localhost:3000` in your web browser.
+- This command will build and start the Docker containers for both the backend and frontend. Once the containers are running, you can access the application at` http://localhost:3000` in your web browser.
 
 ## Project Structure
 
-1. `server/`: Contains the Nest.ts server code.
+1. `backend/`: Contains the Nest.ts backend code.
 2. `frontend/`: Contains the React.ts frontend code.
 3. `docker-compose.yml`: Defines the Docker services for the project.
    Customization
 
-Feel free to customize the codebase according to your requirements. You can modify the server code in the `server/` folder and the frontend code in the `frontend/` folder.
+Feel free to customize the codebase according to your requirements. You can modify the backend code in the `backend/` folder and the frontend code in the `frontend/` folder.
 
 ## Dependencies
 
