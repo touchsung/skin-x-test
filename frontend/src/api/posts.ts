@@ -11,7 +11,7 @@ export const getAllPosts = async (
       const queryParams = new URLSearchParams(
         query as Record<string, string>
       ).toString();
-      url += `?${queryParams}`;
+      url += `?${queryParams.toLowerCase()}`;
     }
 
     const response = await api.get(url, {
